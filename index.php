@@ -9,14 +9,14 @@
 </head>
 <body <?php body_class(); ?>>
     <header>
-        <h1>WP CoinAPI</h1>
+        <h1><?= get_bloginfo('title') ?></h1>
     </header>
     <main>
-        <p>Cuerpo principal</p>
+        
     </main>
     <footer>
         <p>Autor: Carlos Martínez P.</p>
     </footer>
+    <?php wp_footer(); ?>
 </body>
-<?php wp_footer(); ?>
 </html>

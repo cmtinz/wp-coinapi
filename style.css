@@ -11,5 +11,23 @@ Text Domain: cmtinz
 */
 
 body {
-    color: red;
+    font-family: sans-serif;
+    display: grid;
+    min-height: calc(100vh - 1rem);
+    grid-template-rows: 1fr 1fr auto;
+    justify-content: center;
+}
+
+header {
+    align-self: end;
+}
+
+.currency {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto;
+    grid-gap: 1rem
+}
+
+body.admin-bar {
+    min-height: calc(100vh - 1rem - 32px);
 }

@@ -1,45 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const baseURL = " https://rest.coinapi.io/";
-    const apiKey = "2AC3FF0F-8C4F-49F4-9888-7C9DD660E404";
-    const baseAssetId = "USD";
-    const coins = [{
-            assetId: "BTC",
-            name: "Bitcoin"
-        },
-        {
-            assetId: "ETH",
-            name: "Etherum"
-        },
-        {
-            assetId: "XRP",
-            name: "Ripple"
-
-        },
-        {
-            assetId: "LTC",
-            name: "Litecoin"
-        },
-        {
-            assetId: "ADA",
-            name: "Cardano"
-        }
-    ];
-    const basePrice = 1;
-    coins.forEach((coin, index) => {
-        fetch(baseURL + `v1/exchangerate/${baseAssetId}/${coin.assetId}`, {
-                headers: {
-                    'X-CoinAPI-Key': apiKey
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw Error(response.statusText)
-                };
-                return response.json();
-            })
-            .then(response => {
-                coins[index].exhange = response.rate
-            })
-            .catch(error => console.error('Error:', error));
+    const baseURL = document.querySelector("link[rel='https://api.w.org/']").href;
+    fetch(baseURL + "cmtinz/v1/coinapi")
+    .then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
     })
+    .then(response => {
+        const lista = document.createElement('div');
+        lista.classList.add('currencies');
+        response.coins.forEach(coin => {
+            const item = document.createElement('div');
+            item.dataset.currency = coin.asset_id;
+            item.classList.add('currency')
+            item.innerHTML = `<span class="currency-name">${coin.name}</span><span class="currency-id">${coin.asset_id}</span><span class="currency-rate">${coin.rate}</span><span class="currency-rate">${response.base_asset_id}</span>`;
+            lista.appendChild(item);
+        })
+        document.querySelector('main').appendChild(lista);
+    })
+    .catch(error => console.error('Error:', error));
 })
