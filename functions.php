@@ -1,17 +1,29 @@
 <?php 
 
-/* Registro de estilos */
-wp_enqueue_style( 'style', get_stylesheet_uri() );
+/* Registro de estilos y scripts*/
+function enqueue() {
+    wp_enqueue_style( 'style', get_stylesheet_uri() );
+    wp_enqueue_script( 'icon-scripts', get_stylesheet_directory_uri() . "/main.js", array('jquery'), false, true );
+}
+add_action('wp_enqueue_scripts', 'enqueue');
 
-/* Registro de scripts  */
-wp_enqueue_script( 'icon-scripts', get_stylesheet_directory_uri() . "/main.js", array('jquery'), false, true );
-
-/* Función del endpoin */
+/* Función del endpoint */
 function coinapi($data) {
-    if ()
+    $cache_time = get_theme_mod( 'cmtinz_coinapi_cache' );
+    $cache_time = $cache_time? $cache_time * 60 : 60;
+    $get_coinapi_data = get_transient('coinapi_data');
+    if (!$get_coinapi_data) {
+        $get_coinapi_data = get_coinapi_data();
+        set_transient( 'coinapi_data', $get_coinapi_data, $cache_time );
+        $get_coinapi_data['cached'] = false;
+    } else {
+        $get_coinapi_data['cached'] = true;
+    }
+    return $get_coinapi_data;
 }
 
-function get_coinapi_datga( $data ) {
+/* Consulta CoinAPI */
+function get_coinapi_data() {
     $base_asset_id = "USD";
     $coins = array(
         array('asset_id' => 'BTC', 'name' => 'Bitcoin'),
@@ -69,13 +81,29 @@ function registrar_opciones($wp_customize) {
 		'type' => 'theme_mod',
 		'capability' => 'edit_theme_options',
 		'default' => '',
-		'transport' => 'postMessage',
+		'transport' => 'default',
 		) );
 
 	$wp_customize->add_control( "cmtinz_coinapi_key", array(
 	'type' => 'text',
 	'section' => 'cmtinz_coinapi',
 	'label' => __( "Clave de CoinAPI", 'cmtinz' )
+    ) );
+
+    /* Agrega item Tiempo de Cache */
+    $wp_customize->add_setting( "cmtinz_coinapi_cache", array(
+		'type' => 'theme_mod',
+		'capability' => 'edit_theme_options',
+		'default' => '60',
+		'transport' => 'default',
+		) );
+
+	$wp_customize->add_control( "cmtinz_coinapi_cache", array(
+	'type' => 'number',
+	'section' => 'cmtinz_coinapi',
+    'label' => __( "Tiempo de vida del cache", 'cmtinz' ),
+    'description' => __('Tiempo de vida del cache en minutos.'),
+    'input_attrs' => array('min' => 0)
     ) );
 }
 add_action('customize_register', 'registrar_opciones');
