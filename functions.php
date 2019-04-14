@@ -7,7 +7,11 @@ wp_enqueue_style( 'style', get_stylesheet_uri() );
 wp_enqueue_script( 'icon-scripts', get_stylesheet_directory_uri() . "/main.js", array('jquery'), false, true );
 
 /* Función del endpoin */
-function coinapi( $data ) {
+function coinapi($data) {
+    if ()
+}
+
+function get_coinapi_datga( $data ) {
     $base_asset_id = "USD";
     $coins = array(
         array('asset_id' => 'BTC', 'name' => 'Bitcoin'),
