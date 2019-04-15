@@ -15,7 +15,7 @@
         
     </main>
     <footer>
-        <p>Autor: Carlos Martínez P.</p>
+        <p>Autor: Carlos Martínez P. Basado en <a href="http://coinapi.io">CoinAPI.io</a></p>
     </footer>
     <?php wp_footer(); ?>
 </body>

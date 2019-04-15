@@ -9,13 +9,15 @@ add_action('wp_enqueue_scripts', 'enqueue');
 
 /* Función del endpoint */
 function coinapi($data) {
-    $cache_time = get_theme_mod( 'cmtinz_coinapi_cache' );
-    $cache_time = $cache_time? $cache_time * 60 : 60;
-    $get_coinapi_data = get_transient('coinapi_data');
+    $get_coinapi_data = get_transient('coinapi_data'); // Consulta cache
     if (!$get_coinapi_data) {
         $get_coinapi_data = get_coinapi_data();
-        set_transient( 'coinapi_data', $get_coinapi_data, $cache_time );
-        $get_coinapi_data['cached'] = false;
+        if (!is_wp_error($get_coinapi_data)) {
+            $cache_time = get_theme_mod( 'cmtinz_coinapi_cache' );
+            $cache_time = $cache_time? $cache_time * 60 : 60;
+            set_transient( 'coinapi_data', $get_coinapi_data, $cache_time );
+            $get_coinapi_data['cached'] = false;
+        }
     } else {
         $get_coinapi_data['cached'] = true;
     }

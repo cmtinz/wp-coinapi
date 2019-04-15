@@ -39,10 +39,22 @@ footer p {
     text-align: end;
 }
 
+.mensaje {
+    color: gray;
+}
+
+.d-none {
+    display: none;
+}
+
 .currency {
     display: grid;
     grid-template-columns: 1fr 1fr 4fr auto;
     grid-gap: .5rem
+}
+
+.currency-name {
+    font-weight: bold;
 }
 
 .currency-rate {
